@@ -1,5 +1,83 @@
-{{first_name}}
-{{last_name}}
-{{email}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Table</title>
+    <style>
+        table {
+            width: 50%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 18px;
+            text-align: left;
+        }
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .logout-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 20px 0;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <center>
+<h3><b>Role : <small>Patient</small></b></h3>
+<h2>User Information Table</h2>
 
-<button><a href="{% url 'logout' %}">LOGOUT</a></button>
+<table>
+    <tr>
+        <th>Attribute</th>
+        <th>Value</th>
+    </tr>
+    <tr>
+        <td>First Name</td>
+        <td>{{first_name}}</td>
+    </tr>
+    <tr>
+        <td>Last Name</td>
+        <td>{{last_name}}</td>
+    </tr>
+   
+    <tr>
+        <td>Email</td>
+        <td>{{email}}</td>
+    </tr>
+    <tr>
+        <td>Phone Number</td>
+        <td>{{phone_number}}</td>
+    </tr>
+    <tr>
+        <td>City</td>
+        <td>{{city}}</td>
+    </tr>
+    <tr>
+        <td>Country</td>
+        <td>{{country}}</td>
+    </tr>
+    <tr>
+        <td>Pin Code</td>
+        <td>{{pin_code}}</td>
+    </tr>
+    
+</table>
+<button class="logout-button"><a href="{% url 'logout' %}">LOGOUT</a></button>
+</center>
+</body>
+</html>
+
+

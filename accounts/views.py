@@ -2,8 +2,8 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from accounts.utils import detectUser
 
-from .models import User, UserProfile
-from accounts.form import UserForm,UserProfileForm
+from .models import User
+from accounts.form import UserForm
 from django.contrib.auth.decorators import login_required,user_passes_test
 from django.core.exceptions import  PermissionDenied
 from django.contrib.auth.tokens import default_token_generator
@@ -25,8 +25,15 @@ def registerUser(request):
             last_name = form.cleaned_data['last_name']
             username = form.cleaned_data['username']
             email = form.cleaned_data['email']
+            phone_number = form.cleaned_data['phone_number']
+            address = form.cleaned_data['address']
+            country = form.cleaned_data['country']
+            state = form.cleaned_data['state']
+            city = form.cleaned_data['city']
+            pin_code = form.cleaned_data['pin_code']
+            
             password = form.cleaned_data['password']
-            user = User.objects.create_user(first_name=first_name,last_name=last_name,username=username,email=email,password=password)
+            user = User.objects.create_user(first_name=first_name,last_name=last_name,username=username,phone_number=phone_number,email=email,address=address,country=country,state=state,city=city,pin_code=pin_code,password=password)
             user.role =  User.DOCTOR
             user.save()
             return redirect('home')
@@ -35,11 +42,11 @@ def registerUser(request):
             print(form.errors)
     else:
         form = UserForm()
-        form_1 = UserProfileForm()
+        
     
     context = {
             'form':form,
-            'form_1':form_1,
+           
         }
     return render(request,'registerUser.html',context)
 
@@ -54,8 +61,15 @@ def registerPatient(request):
             last_name = form.cleaned_data['last_name']
             username = form.cleaned_data['username']
             email = form.cleaned_data['email']
+            phone_number = form.cleaned_data['phone_number']
+            address = form.cleaned_data['address']
+            country = form.cleaned_data['country']
+            state = form.cleaned_data['state']
+            city = form.cleaned_data['city']
+            pin_code = form.cleaned_data['pin_code']
+            
             password = form.cleaned_data['password']
-            user = User.objects.create_user(first_name=first_name,last_name=last_name,username=username,email=email,password=password)
+            user = User.objects.create_user(first_name=first_name,last_name=last_name,username=username,phone_number=phone_number,email=email,address=address,country=country,state=state,city=city,pin_code=pin_code,password=password)
             user.role =  User.PATIENT
             user.save()
             return redirect('home')
@@ -64,11 +78,11 @@ def registerPatient(request):
             print(form.errors)
     else:
         form = UserForm()
-        form_1 = UserProfileForm()
+        
     
     context = {
             'form':form,
-            'form_1':form_1,
+            
         }
     return render(request,'registerPatient.html',context)
 
@@ -121,6 +135,11 @@ def DoctorDashboard(request):
         'first_name':request.user.first_name,
         'last_name':request.user.last_name,
         'email':request.user.email,
+        'phone_number':request.user.phone_number,
+        'city':request.user.city,
+        'state':request.user.state,
+        'country':request.user.country,
+        'pin_code':request.user.pin_code,
     }
     
     return render(request,'DoctorDashboard.html',context)
@@ -130,10 +149,15 @@ def PatientDashboard(request):
         'first_name':request.user.first_name,
         'last_name':request.user.last_name,
         'email':request.user.email,
+        'phone_number':request.user.phone_number,
+        'city':request.user.city,
+        'state':request.user.state,
+        'country':request.user.country,
+        'pin_code':request.user.pin_code,
     }
     return render(request,'PatientDashboard.html',context)
 
 def logout(request):
     auth.logout(request)
     
-    return redirect('login')
+    return redirect('home')
