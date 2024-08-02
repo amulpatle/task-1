@@ -3,81 +3,172 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HTML Table</title>
+    <title>Health Categories and Blog</title>
     <style>
-        table {
-            width: 50%;
-            border-collapse: collapse;
-            margin: 25px 0;
-            font-size: 18px;
-            text-align: left;
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
         }
-        th, td {
-            padding: 12px;
-            border-bottom: 1px solid #ddd;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        .logout-button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
+
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 600px;
             text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 20px 0;
+            margin-top: 20px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .categories {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .category {
+            background: #007BFF;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
             cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .category:hover {
+            background: #0056b3;
+        }
+
+        .details {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .blog-form {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .blog-form input, .blog-form textarea, .blog-form select {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        .blog-form input[type="file"] {
+            padding: 3px;
+        }
+
+        .blog-form button {
+            background: #007BFF;
+            color: white;
+            padding: 10px;
             border: none;
             border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .blog-form button:hover {
+            background: #0056b3;
         }
     </style>
 </head>
 <body>
-    <center>
-<h3><b>Role : <small>Patient</small></b></h3>
-<h2>User Information Table</h2>
+    <div class="container">
+        <h1>Health Categories</h1>
+        <div class="categories">
+            <div class="category" onclick="showDetails('Mental Health')">
+                <h2>Mental Health</h2>
+            </div>
+            <div class="category" onclick="showDetails('Heart Disease')">
+                <h2>Heart Disease</h2>
+            </div>
+            <div class="category" onclick="showDetails('COVID-19')">
+                <h2>COVID-19</h2>
+            </div>
+            <div class="category" onclick="showDetails('Immunization')">
+                <h2>Immunization</h2>
+            </div>
+        </div>
+        <div class="details" id="details"></div>
+    </div>
 
-<table>
-    <tr>
-        <th>Attribute</th>
-        <th>Value</th>
-    </tr>
-    <tr>
-        <td>First Name</td>
-        <td>{{first_name}}</td>
-    </tr>
-    <tr>
-        <td>Last Name</td>
-        <td>{{last_name}}</td>
-    </tr>
-   
-    <tr>
-        <td>Email</td>
-        <td>{{email}}</td>
-    </tr>
-    <tr>
-        <td>Phone Number</td>
-        <td>{{phone_number}}</td>
-    </tr>
-    <tr>
-        <td>City</td>
-        <td>{{city}}</td>
-    </tr>
-    <tr>
-        <td>Country</td>
-        <td>{{country}}</td>
-    </tr>
-    <tr>
-        <td>Pin Code</td>
-        <td>{{pin_code}}</td>
-    </tr>
-    
-</table>
-<button class="logout-button"><a href="{% url 'logout' %}">LOGOUT</a></button>
-</center>
+    <div class="container">
+        <h1>Create New Blog Post</h1>
+        <form class="blog-form" id="blogForm">
+            <input type="text" id="title" placeholder="Title" required>
+            <input type="file" id="image" accept="image/*" required>
+            <select id="category" required>
+                <option value="">Select Category</option>
+                <option value="Mental Health">Mental Health</option>
+                <option value="Heart Disease">Heart Disease</option>
+                <option value="COVID-19">COVID-19</option>
+                <option value="Immunization">Immunization</option>
+            </select>
+            <textarea id="summary" placeholder="Summary" rows="3" required></textarea>
+            <textarea id="content" placeholder="Content" rows="6" required></textarea>
+            <button type="button" onclick="submitBlog()">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        function showDetails(category) {
+            const details = document.getElementById('details');
+            let content = '';
+
+            switch (category) {
+                case 'Mental Health':
+                    content = '<h2>Mental Health</h2><p>Mental health includes our emotional, psychological, and social well-being. It affects how we think, feel, and act.</p>';
+                    break;
+                case 'Heart Disease':
+                    content = '<h2>Heart Disease</h2><p>Heart disease refers to various types of conditions that can affect heart function. These types include coronary artery disease, heart rhythm problems, and congenital heart defects.</p>';
+                    break;
+                case 'COVID-19':
+                    content = '<h2>COVID-19</h2><p>COVID-19 is an infectious disease caused by the coronavirus SARS-CoV-2. It can cause mild to severe respiratory illness.</p>';
+                    break;
+                case 'Immunization':
+                    content = '<h2>Immunization</h2><p>Immunization is the process by which a person becomes protected against a disease through vaccination. Vaccines stimulate the body\'s own immune system to protect the person against subsequent infection or disease.</p>';
+                    break;
+                default:
+                    content = '<h2>Details</h2><p>Select a category to see details.</p>';
+            }
+
+            details.innerHTML = content;
+            details.style.display = 'block';
+        }
+
+        function submitBlog() {
+            const title = document.getElementById('title').value;
+            const image = document.getElementById('image').files[0];
+            const category = document.getElementById('category').value;
+            const summary = document.getElementById('summary').value;
+            const content = document.getElementById('content').value;
+
+            if (title && image && category && summary && content) {
+                alert('Blog post submitted successfully!');
+                // Here you would normally send the form data to the server
+                // For this example, we'll just reset the form
+                document.getElementById('blogForm').reset();
+            } else {
+                alert('Please fill out all fields.');
+            }
+        }
+    </script>
 </body>
 </html>
-
-
