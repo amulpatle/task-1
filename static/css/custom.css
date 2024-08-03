@@ -1,0 +1,95 @@
+body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 600px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .categories {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .category {
+            background: #007BFF;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .category:hover {
+            background: #0056b3;
+        }
+
+        .details {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .blog-form {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .blog-form input, .blog-form textarea, .blog-form select {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        .blog-form input[type="file"] {
+            padding: 3px;
+        }
+
+        .blog-form button {
+            background: #007BFF;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .blog-form button:hover {
+            background: #0056b3;
+        }
+
+        .blog-list {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .blog-item {
+            background: #f9f9f9;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }

@@ -9,6 +9,7 @@ from django.core.exceptions import  PermissionDenied
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib import auth
 from django.http import HttpResponse
+from BlogPost.forms import BlogPostForm
 # Create your views here.
 
 def home(request):
@@ -89,7 +90,7 @@ def registerPatient(request):
 
 def login(request):
     if request.user.is_authenticated:
-        print(request.user.role)
+        print(request.user)
         if request.user.role==1 :
             return redirect('DoctorDashboard')
         elif request.user.role == 2:

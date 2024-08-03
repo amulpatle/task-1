@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Blog Post</title>
+    <style>
+        /* Internal CSS for styling */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .container h1 {
+            text-align: center;
+        }
+
+        .blog-form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .blog-form input,
+        .blog-form select,
+        .blog-form textarea,
+        .blog-form button {
+            margin-bottom: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        .blog-form button {
+            cursor: pointer;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .blog-form button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Create New Blog Post</h1>
+        <form class="blog-form" id="blogForm" method="post" enctype="multipart/form-data" action="{% url 'createblog' %}">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            <input type="text" name="title" placeholder="Title" value="{{ form.title.value }}" required>
+            <input type="file" name="image" accept="image/*" required>
+            <select name="category" required>
+                <option value="">Select Category</option>
+                <option value="Mental Health" {% if form.category.value == "Mental Health" %}selected{% endif %}>Mental Health</option>
+                <option value="Heart Disease" {% if form.category.value == "Heart Disease" %}selected{% endif %}>Heart Disease</option>
+                <option value="COVID-19" {% if form.category.value == "COVID-19" %}selected{% endif %}>COVID-19</option>
+                <option value="Immunization" {% if form.category.value == "Immunization" %}selected{% endif %}>Immunization</option>
+            </select>
+            <textarea name="summary" placeholder="Summary" rows="3" required>{{ form.summary.value }}</textarea>
+            <textarea name="content" placeholder="Content" rows="6" required>{{ form.content.value }}</textarea>
+            <label>
+                <input type="checkbox" name="is_draft" {% if form.is_draft.value %}checked{% endif %}> Save as Draft
+            </label>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+    <script>
+        // JavaScript for handling form submission
+        function submitBlog() {
+            const form = document.getElementById('blogForm');
+            form.submit();
+        }
+    </script>
+</body>
+</html>

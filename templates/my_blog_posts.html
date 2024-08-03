@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Blog Posts</title>
+    <style>
+        /* Internal CSS for styling */
+        .container {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .sidebar {
+            width: 200px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 20px;
+        }
+
+        .sidebar h3 {
+            text-align: center;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar li {
+            margin-bottom: 10px;
+        }
+
+        .content {
+            flex-grow: 1;
+        }
+
+        .blog-posts {
+            list-style: none;
+            padding: 0;
+        }
+
+        .blog-posts li {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .blog-posts img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .blog-posts h2 {
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h3>Filter by Category</h3>
+            <ul>
+                {% for code, name in categories %}
+                <li>
+                    <a href="?category={{ code }}">{{ name }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="content">
+            <h1>My Blog Posts</h1>
+            <ul class="blog-posts">
+                {% for post in blog_posts %}
+                <li>
+                    <h2>{{ post.title }}{% if post.is_draft %} (Draft){% endif %}</h2>
+                    <img src="{{ post.image.url }}" alt="{{ post.title }}">
+                    <p>{{ post.summary }}</p>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
