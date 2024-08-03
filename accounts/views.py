@@ -171,3 +171,12 @@ def blog_post_detail(request,id):
         'post':post,
     }
     return render(request,'blog_post_detail.html',context)
+
+def my_blog_post_detail(request,id):
+    post = get_object_or_404(BlogPost,id=id)
+    context = {
+        'post':post,
+    }
+    return render(request,'my_blog_posts_details.html',context)
+
+

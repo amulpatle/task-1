@@ -10,5 +10,6 @@ urlpatterns = [
     path('DoctorDashboard/',views.DoctorDashboard,name='DoctorDashboard'),
     path('PatientDashboard/',views.PatientDashboard,name="PatientDashboard"),
     path('post/<int:id>/', views.blog_post_detail, name='blog_post_detail'),
+    path('my_blog_post_detail/<int:id>/',views.my_blog_post_detail,name="my_blog_post_detail"),
      
 ]

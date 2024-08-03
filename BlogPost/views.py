@@ -31,7 +31,7 @@ def my_blog_posts(request):
     blog_posts = BlogPost.objects.filter(author=request.user)
     categories = BlogPost.CATEGORY_CHOICES
     context = {
-        'blog_posts': blog_posts,
+        'posts': blog_posts,
         'categories':categories,
     }
     return render(request, 'my_blog_posts.html', context)
