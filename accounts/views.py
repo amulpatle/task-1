@@ -10,6 +10,10 @@ from django.contrib.auth.tokens import default_token_generator
 from django.contrib import auth
 from django.http import HttpResponse
 from BlogPost.forms import BlogPostForm
+
+from BlogPost.models import BlogPost
+from accounts.models import User
+from django.shortcuts import get_object_or_404
 # Create your views here.
 
 def home(request):
@@ -146,15 +150,13 @@ def DoctorDashboard(request):
     return render(request,'DoctorDashboard.html',context)
 
 def PatientDashboard(request):
+    
+    all_post = BlogPost.objects.all()
+    
+    
+    
     context = {
-        'first_name':request.user.first_name,
-        'last_name':request.user.last_name,
-        'email':request.user.email,
-        'phone_number':request.user.phone_number,
-        'city':request.user.city,
-        'state':request.user.state,
-        'country':request.user.country,
-        'pin_code':request.user.pin_code,
+        'all_post':all_post,
     }
     return render(request,'PatientDashboard.html',context)
 
@@ -162,3 +164,10 @@ def logout(request):
     auth.logout(request)
     
     return redirect('home')
+
+def blog_post_detail(request,id):
+    post = get_object_or_404(BlogPost,id=id)
+    context = {
+        'post':post,
+    }
+    return render(request,'blog_post_detail.html',context)

@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Health Categories and Blog</title>
+    <title>Doctor Dashboard</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+            background-color: #f4f4f4;
             margin: 0;
             padding: 0;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
             height: 100vh;
         }
@@ -22,18 +22,14 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 80%;
-            max-width: 600px;
+            max-width: 800px;
             text-align: center;
-            margin-top: 20px;
-        }
-
-        h1 {
-            margin-bottom: 20px;
+            position: relative;
         }
 
         .buttons {
             display: flex;
-            justify-content: space-between;
+            justify-content: space-around;
             margin-bottom: 20px;
         }
 
@@ -45,22 +41,60 @@
             border-radius: 5px;
             cursor: pointer;
             text-decoration: none;
+            font-size: 14px;
+            transition: background-color 0.3s, box-shadow 0.3s;
         }
 
         .button:hover {
             background: #0056b3;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .user-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #007BFF;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: #fff;
+            margin-bottom: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .user-info .username {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .user-info .user-email {
+            font-size: 14px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+
+        p {
+            font-size: 16px;
+            color: #666;
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="user-info">
+            <div class="username">Username: {{ user.username }}</div>
+            <div class="user-email">Email: {{ user.email }}</div>
+        </div>
         <div class="buttons">
             <a href="{% url 'my_blog_posts' %}" class="button">All Blogs</a>
             <a href="{% url 'createblog' %}" class="button">Create Blog</a>
             <a href="{% url 'logout' %}" class="button">Logout</a>
-
         </div>
-        <h1>Welcome to the Blog</h1>
+        <h1>Welcome to the Doctor Dashboard</h1>
         <p>Select an option to proceed.</p>
     </div>
 </body>
