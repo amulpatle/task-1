@@ -1,6 +1,7 @@
 from django import forms
 from .models import User
-from .models import Doctor
+from .models import Doctor,Appointment
+
 # from .validators import allow_only_images_validator
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
@@ -25,6 +26,12 @@ class EditDoctorProfile(forms.ModelForm):
         model = Doctor
         fields = ['profile_picture','speciality']
 
-                
+class AppointmentForm(forms.ModelForm):
+    class Meta:
+        model = Appointment
+        fields = ['speciality','date','start_time']  
+        widgets = {
+            'date': forms.DateInput(attrs={'type': 'date'}),
+            'start_time': forms.TimeInput(attrs={'type': 'time'}),
+        }     
    
-    

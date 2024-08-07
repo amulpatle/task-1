@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from accounts.utils import detectUser
 
-from .models import User
+from .models import Doctor, User
 from accounts.form import UserForm
 from django.contrib.auth.decorators import login_required,user_passes_test
 from django.core.exceptions import  PermissionDenied
@@ -14,6 +14,8 @@ from BlogPost.forms import BlogPostForm
 from BlogPost.models import BlogPost
 from accounts.models import User
 from django.shortcuts import get_object_or_404
+from .form import EditDoctorProfile,AppointmentForm
+
 # Create your views here.
 
 def home(request):
@@ -84,10 +86,9 @@ def registerPatient(request):
     else:
         form = UserForm()
         
-    
+
     context = {
             'form':form,
-            
         }
     return render(request,'registerPatient.html',context)
 
@@ -106,8 +107,7 @@ def login(request):
         password = request.POST['password']
         
         user = auth.authenticate(request, email=email, password=password)
-        print(user)
-        print(user.role)
+       
         if user is not None:
             auth.login(request, user)
             if request.user.role==1 :
@@ -131,9 +131,6 @@ def myAccount(request):
     return redirect(redirectUrl)
 
 def DoctorDashboard(request):
-    print(request.user.first_name)
-    print(request.user.last_name)
-    print(request.user.email)
     # print(request.user.state)
     
     context = {
@@ -150,7 +147,29 @@ def DoctorDashboard(request):
     return render(request,'DoctorDashboard.html',context)
 
 def edit_profile(request):
-    return render(request,'doctor/edit_profile.html')
+    user = request.user
+
+
+    doctor = get_object_or_404(Doctor, user=user)
+    
+
+    if request.method == 'POST':
+        form = EditDoctorProfile(request.POST, request.FILES, instance=doctor)
+        print("NNNNN")
+        if form.is_valid():
+            print("NNNNN")
+            form.save()
+            return redirect('DoctorDashboard')
+    else:
+        form = EditDoctorProfile(instance=doctor)
+    
+    context = {
+        'form': form,
+    }
+    
+    return render(request, 'doctor/edit_profile.html', context)
+
+    
 
 def PatientDashboard(request):
     
@@ -184,16 +203,25 @@ def my_blog_post_detail(request,id):
 
 
 def doctor_list(request):
-    doctors = User.objects.filter(role=User.DOCTOR)  # Ensure 'role' field and 'User.DOCTOR' constant are defined
+    user = User.objects.filter(role=User.DOCTOR)
+    
+    print(user[0].doctor.profile_picture.url)
+    
     context = {
-        'doctors': doctors
+        'user':user
     }
-    return render(request, 'doctor_list.html', context)
+    
+    return render(request, 'doctor_list.html',context)
 
+
+# def edit_doctor_profile(request, id):
 
 def book_appointment(request,id):
-    print(request,id)
-    doctor = User.objects.filter(id=id)
-    print(doctor[0].username)
-    return HttpResponse('success')
+    doctor = User.objects.get(id=id)
+    print(doctor)
+    form = AppointmentForm()
+    context = {
+        'form':form,
+    }
+    return render(request,'book_appointment.html',context)
 

@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,7 +31,7 @@
             margin: 20px 0;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
+            text-align: left;
             flex: 0 0 30%;
             box-sizing: border-box;
         }
@@ -40,11 +41,27 @@
             height: 100px;
             border-radius: 50%;
             object-fit: cover;
+            display: block;
+            margin: 0 auto 20px;
         }
 
         .doctor-name {
             font-size: 20px;
             margin: 10px 0;
+            color: #333;
+            text-align: center;
+        }
+
+        .doctor-info {
+            margin-bottom: 10px;
+        }
+
+        .info-label {
+            font-weight: bold;
+            color: #555;
+        }
+
+        .info-value {
             color: #333;
         }
 
@@ -59,6 +76,8 @@
             border-radius: 5px;
             cursor: pointer;
             text-decoration: none;
+            text-align: center;
+            width: 100%;
         }
 
         .book-appointment:hover {
@@ -70,11 +89,30 @@
     <div class="container">
         <h1>Doctors List</h1>
         <div class="doctor-list">
-            {% for doctor in doctors %}
+            {% for doc in user %}
                 <div class="doctor-item">
-                    <img src="" alt="{{ doctor.username }}" class="doctor-image">
-                    <h2 class="doctor-name">{{ doctor.name }}</h2>
-                    <a href="{% url 'book_appointment' doctor.id %}" class="book-appointment">Book Appointment</a>
+                    {% if doc.doctor.profile_picture %}
+                    <img src="{{ doc.doctor.profile_picture.url }}" alt="{{ doc.username }}" class="doctor-image">
+                    {% else %}
+                    <img src="{% static 'custom/custom_img.png' %}" alt="{{ doc.username }}" class="doctor-image">
+                    {% endif %}
+                    <h2 class="doctor-name">{{ doc.name }}</h2>
+                    <div class="doctor-info">
+                        <span class="info-label">Username: </span><span class="info-value">{{ doc.username }}</span>
+                    </div>
+                    <div class="doctor-info">
+                        <span class="info-label">Email: </span><span class="info-value">{{ doc.email }}</span>
+                    </div>
+                    <div class="doctor-info">
+                        <span class="info-label">Phone Number: </span><span class="info-value">{{ doc.phone_number }}</span>
+                    </div>
+                    <div class="doctor-info">
+                        <span class="info-label">Address: </span><span class="info-value">{{ doc.address }}</span>
+                    </div>
+                    <div class="doctor-info">
+                        <span class="info-label">Country: </span><span class="info-value">{{ doc.country }}</span>
+                    </div>
+                    <a href="{% url 'book_appointment' doc.id %}" class="book-appointment">Book Appointment</a>
                 </div>
             {% endfor %}
         </div>

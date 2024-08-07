@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser,BaseUserManager,PermissionsMixin
 from django.db.models.fields.related import OneToOneField,ForeignKey
 
-
 # Create your models here.
 
 
@@ -61,6 +60,7 @@ class User(AbstractBaseUser,PermissionsMixin):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     username = models.CharField(max_length=50,unique=True)
+    # profile_picture = models.ImageField(upload_to='Doctor_profile/', blank=True, null=True)
     email = models.EmailField(max_length=100,unique=True)
     phone_number = models.CharField(max_length=12,blank=True)
     role = models.PositiveSmallIntegerField(choices=ROLE_CHOICE,blank=True,null=True)
@@ -123,9 +123,22 @@ class User(AbstractBaseUser,PermissionsMixin):
         return self.is_staff
 
 class Doctor(models.Model):
-    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    # user = models.ForeignKey(User,on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     profile_picture = models.ImageField(upload_to='Doctor_profile/', blank=True, null=True)
     speciality = models.CharField(max_length=100)
     
     def __str__(self):
         return self.user.username
+    
+    
+class Appointment(models.Model):
+    patient = models.ForeignKey(User,on_delete=models.CASCADE,related_name='appointments')
+    doctor = models.ForeignKey(Doctor,on_delete=models.CASCADE,related_name='appointments')
+    speciality = models.CharField(max_length=100)
+    date = models.DateField()
+    start_time = models.TimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"{self.patient.username} with {self.doctor.user.username} on {self.date} at {self.start_time}"
