@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser,BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser,BaseUserManager,PermissionsMixin
 from django.db.models.fields.related import OneToOneField,ForeignKey
 
 
@@ -43,11 +43,12 @@ class UserManager(BaseUserManager):
         user.is_active =  True
         user.is_staff = True
         user.is_superadmin = True
+        user.is_superuser = True
         user.save(using=self._db)
         return user
     
 
-class User(AbstractBaseUser):
+class User(AbstractBaseUser,PermissionsMixin):
     DOCTOR = 1
     PATIENT = 2
     
@@ -81,6 +82,22 @@ class User(AbstractBaseUser):
     is_superadmin = models.BooleanField(default=False)
     
     
+    groups = models.ManyToManyField(
+        'auth.Group',
+        related_name='custom_user_set',  # Custom related_name
+        blank=True,
+        help_text=('The groups this user belongs to. A user will get all permissions granted to each of their groups.'),
+        verbose_name=('groups'),
+    )
+    user_permissions = models.ManyToManyField(
+        'auth.Permission',
+        related_name='custom_user_set',  # Custom related_name
+        blank=True,
+        help_text=('Specific permissions for this user.'),
+        verbose_name=('user permissions'),
+    )
+    
+    
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username','first_name','last_name']
     
@@ -99,8 +116,16 @@ class User(AbstractBaseUser):
             use_role = 'Patient'
         return user_role
     
+    def has_perm(self, perm, obj=None):
+        return self.is_superuser or self.is_staff
 
+    def has_module_perms(self, app_label):
+        return self.is_staff
+
+class Doctor(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    profile_picture = models.ImageField(upload_to='Doctor_profile/', blank=True, null=True)
+    speciality = models.CharField(max_length=100)
     
-    
-    
-    
+    def __str__(self):
+        return self.user.username

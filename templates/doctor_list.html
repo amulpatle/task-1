@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctors List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 90%;
+            margin: auto;
+            overflow: hidden;
+        }
+
+        .doctor-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .doctor-item {
+            background: #fff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            flex: 0 0 30%;
+            box-sizing: border-box;
+        }
+
+        .doctor-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .doctor-name {
+            font-size: 20px;
+            margin: 10px 0;
+            color: #333;
+        }
+
+        .book-appointment {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 10px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .book-appointment:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Doctors List</h1>
+        <div class="doctor-list">
+            {% for doctor in doctors %}
+                <div class="doctor-item">
+                    <img src="" alt="{{ doctor.username }}" class="doctor-image">
+                    <h2 class="doctor-name">{{ doctor.name }}</h2>
+                    <a href="{% url 'book_appointment' doctor.id %}" class="book-appointment">Book Appointment</a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

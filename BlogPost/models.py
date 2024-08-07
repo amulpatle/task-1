@@ -7,7 +7,7 @@ class BlogPost(models.Model):
     CATEGORY_CHOICES = (
         ('Mental Health', 'Mental Health'),
         ('Heart Disease', 'Heart Disease'),
-        ('COVID-19', 'COVID-19'),
+        ('Covid-19', 'Covid-19'),
         ('Immunization', 'Immunization'),
     )
     title = models.CharField(max_length=255)

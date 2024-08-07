@@ -149,11 +149,14 @@ def DoctorDashboard(request):
     
     return render(request,'DoctorDashboard.html',context)
 
+def edit_profile(request):
+    return render(request,'doctor/edit_profile.html')
+
 def PatientDashboard(request):
     
     all_post = BlogPost.objects.all()
-    
-    
+    doctors = User.objects.filter(role=User.DOCTOR)
+    print(doctors[0].username)
     
     context = {
         'all_post':all_post,
@@ -179,4 +182,18 @@ def my_blog_post_detail(request,id):
     }
     return render(request,'my_blog_posts_details.html',context)
 
+
+def doctor_list(request):
+    doctors = User.objects.filter(role=User.DOCTOR)  # Ensure 'role' field and 'User.DOCTOR' constant are defined
+    context = {
+        'doctors': doctors
+    }
+    return render(request, 'doctor_list.html', context)
+
+
+def book_appointment(request,id):
+    print(request,id)
+    doctor = User.objects.filter(id=id)
+    print(doctor[0].username)
+    return HttpResponse('success')
 
