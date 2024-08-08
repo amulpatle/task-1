@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser,BaseUserManager,PermissionsMixin
 from django.db.models.fields.related import OneToOneField,ForeignKey
+from datetime import date, datetime, timedelta
 
 # Create your models here.
 
@@ -139,6 +140,12 @@ class Appointment(models.Model):
     date = models.DateField()
     start_time = models.TimeField()
     created_at = models.DateTimeField(auto_now_add=True)
+    
+    
+    @property
+    def end_time(self):
+        return (datetime.combine(date.min, self.start_time) + timedelta(minutes=45)).time()
+
     
     def __str__(self):
         return f"{self.patient.username} with {self.doctor.user.username} on {self.date} at {self.start_time}"

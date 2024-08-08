@@ -12,7 +12,7 @@ from django.http import HttpResponse
 from BlogPost.forms import BlogPostForm
 
 from BlogPost.models import BlogPost
-from accounts.models import User
+from accounts.models import User,Appointment
 from django.shortcuts import get_object_or_404
 from .form import EditDoctorProfile,AppointmentForm
 
@@ -216,12 +216,34 @@ def doctor_list(request):
 
 # def edit_doctor_profile(request, id):
 
-def book_appointment(request,id):
-    doctor = User.objects.get(id=id)
-    print(doctor)
+def book_appointment(request, id):
+    user = get_object_or_404(User, id=id)
+    doctor = get_object_or_404(Doctor, user=user)
+    
+    if request.method == 'POST':
+        form = AppointmentForm(request.POST)
+        if form.is_valid():
+            appointment = form.save(commit=False) 
+            appointment.doctor = doctor  
+            appointment.patient = request.user  
+            appointment.save()  
+            return redirect('appointment_detail', id=appointment.id)  
+
     form = AppointmentForm()
     context = {
-        'form':form,
+        'form': form,
+        'doctor': doctor,
     }
-    return render(request,'book_appointment.html',context)
+    return render(request, 'appointment/book_appointment.html', context)
 
+
+def appointment_detail(request,id):
+    appointment = get_object_or_404(Appointment, id=id)
+    context = {
+        'appointment': appointment,
+        # 'doctor_name': appointment.doctor.user.get_full_name(),
+        'appointment_date': appointment.date,
+        'start_time': appointment.start_time,
+        'end_time': appointment.end_time,
+    }
+    return render(request, 'appointment/appointment_detail.html', context)
