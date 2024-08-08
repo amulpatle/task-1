@@ -18,6 +18,8 @@ from django.shortcuts import get_object_or_404
 from .form import EditDoctorProfile,AppointmentForm
 from accounts.utils import send_notification
 from django.contrib.sites.shortcuts import get_current_site
+
+from accounts.utils import convert_to_iso
 # Create your views here.
 
 def home(request):
@@ -27,7 +29,7 @@ def home(request):
 def registerUser(request):
     
     if request.method == 'POST':
-        print(request.POST)
+        
         form = UserForm(request.POST)
         if form.is_valid(): 
             first_name = form.cleaned_data['first_name']
@@ -97,7 +99,7 @@ def registerPatient(request):
 
 def login(request):
     if request.user.is_authenticated:
-        print(request.user)
+        
         if request.user.role==1 :
             return redirect('DoctorDashboard')
         elif request.user.role == 2:
@@ -250,7 +252,8 @@ def book_appointment(request, id):
                 'doctor_name': doctor.user.get_full_name(),
                 'appointment_date': appointment.date,
                 'start_time': appointment.start_time,
-                'end_time': end_time
+                'end_time': end_time,
+                'speciality':doctor.speciality
             }
             send_notification(mail_subject, mail_template, context) 
             
@@ -274,3 +277,44 @@ def appointment_detail(request,id):
         'end_time': appointment.end_time,
     }
     return render(request, 'appointment/appointment_detail.html', context)
+
+
+def appointments(request):
+    # user = User.objects.filter(id=request.user.id)
+    # doctor = get_object_or_404(Doctor,user=user)
+    doctor = get_object_or_404(Doctor, user=request.user)
+    
+    # patient = get_object_or_404(User,user=)
+    # print(doctor)
+    appointments = Appointment.objects.filter(doctor=doctor)
+    # print(appointments[0].patient.username)
+    # print(appointments[0].date)
+    # print(appointments[0].start_time)
+    start_time = appointments[0].start_time
+    end_time = appointments[0].end_time
+    date = appointments[0].date
+    
+    appointment_datetime = datetime.combine(date, start_time)
+    appointment_endtime = datetime.combine(date, end_time)
+    # print(appointment_datetime)
+    
+    timezone_str = 'Asia/Kolkata'
+    appointment_datetime1 = convert_to_iso(appointment_datetime,timezone_str)
+    appointment_datetime2 = convert_to_iso(appointment_endtime,timezone_str)
+    
+    # print(appointment_datetime1)
+    print(doctor.user.address)
+    
+    # print(appointments[0].end_time)
+    # print(appointments[0].speciality)
+    
+    context = {
+        # 'title':appointments.speciality,
+        # 'start_time':appointment_datetime1,
+        # 'end_time':appointment_datetime2,
+        'appointments':appointments,
+        
+    }
+    
+    return render(request,'calender/calender.html',context)
+   
