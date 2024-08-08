@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from accounts.utils import detectUser
@@ -15,7 +16,8 @@ from BlogPost.models import BlogPost
 from accounts.models import User,Appointment
 from django.shortcuts import get_object_or_404
 from .form import EditDoctorProfile,AppointmentForm
-
+from accounts.utils import send_notification
+from django.contrib.sites.shortcuts import get_current_site
 # Create your views here.
 
 def home(request):
@@ -150,8 +152,12 @@ def edit_profile(request):
     user = request.user
 
 
-    doctor = get_object_or_404(Doctor, user=user)
-    
+    # doctor = get_object_or_404(Doctor, user=user)
+    try:
+        doctor = Doctor.objects.get(user=user)
+    except Doctor.DoesNotExist:
+        doctor = Doctor.objects.create(user=user)
+        
 
     if request.method == 'POST':
         form = EditDoctorProfile(request.POST, request.FILES, instance=doctor)
@@ -219,14 +225,35 @@ def doctor_list(request):
 def book_appointment(request, id):
     user = get_object_or_404(User, id=id)
     doctor = get_object_or_404(Doctor, user=user)
-    
+    print(request.user.get_full_name())
     if request.method == 'POST':
         form = AppointmentForm(request.POST)
         if form.is_valid():
             appointment = form.save(commit=False) 
             appointment.doctor = doctor  
             appointment.patient = request.user  
-            appointment.save()  
+            appointment.save()
+            mail_subject = "We wanted to let you know that a new appointment has been scheduled. Please find the details below:"
+            mail_template = 'email/appointment.html'
+            
+            
+            appointment_start_datetime = datetime.combine(appointment.date, appointment.start_time)
+            appointment_end_datetime = appointment_start_datetime + timedelta(minutes=45)
+            end_time = appointment_end_datetime.time()
+            
+            context = {
+                'user': request.user,
+                'user_name': request.user.get_full_name(),
+                'to_email': user.email,  # Pass the doctor's email address
+                'domain': get_current_site(request).domain,
+                'appointment': appointment,
+                'doctor_name': doctor.user.get_full_name(),
+                'appointment_date': appointment.date,
+                'start_time': appointment.start_time,
+                'end_time': end_time
+            }
+            send_notification(mail_subject, mail_template, context) 
+            
             return redirect('appointment_detail', id=appointment.id)  
 
     form = AppointmentForm()
@@ -241,7 +268,7 @@ def appointment_detail(request,id):
     appointment = get_object_or_404(Appointment, id=id)
     context = {
         'appointment': appointment,
-        # 'doctor_name': appointment.doctor.user.get_full_name(),
+        'doctor_name': appointment.doctor.user.get_full_name(),
         'appointment_date': appointment.date,
         'start_time': appointment.start_time,
         'end_time': appointment.end_time,

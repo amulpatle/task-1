@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:v="urn:schemas-microsoft-com:vml" lang="en">
+
+<head><link rel="stylesheet" type="text/css" hs-webfonts="true" href="https://fonts.googleapis.com/css?family=Lato|Lato:i,b,bi">
+    <meta property="og:title" content="Email template">  
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">    
+    <style type="text/css">
+      #email {
+        margin: auto;
+        width: 600px;
+        background-color: white;
+      }  
+      .activate-btn{
+        font: inherit;
+        background-color: #C33332;
+        border: none;
+        padding: 10px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: 900;
+        border-radius: 5px; 
+        text-decoration: none;
+      }      
+    </style>    
+  </head>    
+<body bgcolor="#F5F8FA" style="width: 100%; margin: auto 0; padding:0; font-family:Lato, sans-serif; font-size:16px; color:#33475B; word-break:break-word">
+  <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+        <h1 style="color: #333; font-size: 24px; margin-bottom: 20px; text-align: center;">New Appointment Scheduled</h1>
+        <p style="color: #555; font-size: 16px; line-height: 1.5;">Dear Dr. {{ doctor_name }},</p>
+        <p style="color: #555; font-size: 16px; line-height: 1.5;">We wanted to let you know that a new appointment has been scheduled. Please find the details below:</p>
+
+        <div style="margin-top: 20px; border-top: 1px solid #e4e4e4; padding-top: 20px;">
+            <p style="color: #555; font-size: 16px; line-height: 1.5; margin: 5px 0;"><strong>Patient Name:</strong> {{ user_name }}</p>
+            <p style="color: #555; font-size: 16px; line-height: 1.5; margin: 5px 0;"><strong>Appointment Date:</strong> {{ appointment_date }}</p>
+            <p style="color: #555; font-size: 16px; line-height: 1.5; margin: 5px 0;"><strong>Start Time:</strong> {{ start_time }}</p>
+            <p style="color: #555; font-size: 16px; line-height: 1.5; margin: 5px 0;"><strong>End Time:</strong> {{ end_time }}</p>
+            <p style="color: #555; font-size: 16px; line-height: 1.5; margin: 5px 0;"><strong>Speciality:</strong> {{ doctor_speciality }}</p>
+        </div>
+
+        <a href="{{ confirmation_link }}" style="display: inline-block; padding: 10px 20px; margin-top: 20px; background-color: #28a745; color: #ffffff; text-decoration: none; border-radius: 5px; text-align: center; font-size: 16px;">Confirm Appointment</a>
+
+        <div style="margin-top: 30px; font-size: 12px; color: #888; text-align: center;">
+            <p>If you have any questions, please contact our support team.</p>
+            <p>Thank you for using our service.</p>
+        </div>
+    </div>
+
+</body>
+</html>
